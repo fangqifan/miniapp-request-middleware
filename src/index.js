@@ -1,6 +1,6 @@
 import extend from 'just-extend';
-import {Middleware} from 'request-middleware-pipeline';
-import WechatContextNames from 'miniapp-middleware-contracts';
+import { Middleware } from 'request-middleware-pipeline';
+import Contracts from 'miniapp-middleware-contracts';
 
 const defaultOptions = {
     url: '',
@@ -14,16 +14,16 @@ const defaultOptions = {
     complete: null,
 };
 
-const privateNames={
-    options:Symbol('options')
+const privateNames = {
+    options: Symbol('options')
 };
 
-export default class WechatRequestMiddleware extends Middleware {
+export default class extends Middleware {
 
-    constructor(nextMiddleware,options){
+    constructor(nextMiddleware, options) {
         super(nextMiddleware);
 
-        this[privateNames.options]=extend(true,{},defaultOptions,options);
+        this[privateNames.options] = extend(true, {}, defaultOptions, options);
     }
 
     async invoke(middlewareContext) {
@@ -35,11 +35,10 @@ export default class WechatRequestMiddleware extends Middleware {
                 true,
                 {},
                 this[privateNames.options],
-                data[WechatContextNames.WxRequestOptions] || {});
+                data[Contracts.WxRequestOptions] || {});
             const options = {
                 success: (res) => {
-                    data[WechatContextNames.WxResponse] = res;
-                    data[WechatContextNames.WxResponseData] = res.data;
+                    data[Contracts.WxResponse] = res;
                     try {
                         requestOptions.success && typeof requestOptions.success === 'function' && requestOptions.success(res);
                         resolve();
@@ -48,11 +47,11 @@ export default class WechatRequestMiddleware extends Middleware {
                     }
                 },
                 fail: (res) => {
-                    data[WechatContextNames.WxResponse] = res;
+                    data[Contracts.WxResponse] = res;
                     try {
                         requestOptions.fail && typeof requestOptions.fail === 'function' && requestOptions.fail(res);
-                        //TODO:reject应该回传什么?
-                        reject('wxrequest is faild');
+                   
+                        reject(res);
                     } catch (err) {
                         reject(err);
                     }
@@ -63,7 +62,7 @@ export default class WechatRequestMiddleware extends Middleware {
         });
     }
 
-    config(options){
+    config(options) {
         this[privateNames.options] = extend(true, this[privateNames.options], options);
     }
 }

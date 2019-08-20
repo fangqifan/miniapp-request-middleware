@@ -1,6 +1,6 @@
 {
   "name": "miniapp-request-middleware",
-  "version": "0.1.1",
+  "version": "0.1.4",
   "description": "wechat miniapp request middleware ",
   "main": "dist/index.js",
   "scripts": {
@@ -24,6 +24,7 @@
   ],
   "author": "fangqifan",
   "license": "MIT",
+  "miniprogram": "dist",
   "repository": {
     "type": "git",
     "url": "git@github.com:fangqifan/miniapp-request-middleware.git"
@@ -53,7 +54,7 @@
   },
   "dependencies": {
     "just-extend": "^3.0.0",
-    "miniapp-middleware-contracts":"0.1.1",
+    "miniapp-middleware-contracts":"0.2.0",
     "request-middleware-pipeline":"^0.1.0"
   }
 }
